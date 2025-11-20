@@ -1,17 +1,24 @@
-import { Response, NextFunction } from 'express';
-import { AuthRequest } from '../types/express';
-import userService from '../services/userService';
-import { UnauthorizedError } from '../errors/AppError';
-import { ERROR_CODES } from '../constants/errorCodes';
+import { Response, NextFunction } from "express";
+import { AuthRequest } from "../types/express";
+import userService from "../services/userService";
+import { UnauthorizedError } from "../errors/AppError";
+import { ERROR_CODES } from "../constants/errorCodes";
 
 class UserController {
   /**
    * Get current authenticated user
    */
-  public async getCurrentUser(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
+  public async getCurrentUser(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
     try {
       if (!req.user?.id) {
-        throw new UnauthorizedError('User not authenticated', ERROR_CODES.NOT_AUTHENTICATED);
+        throw new UnauthorizedError(
+          "User not authenticated",
+          ERROR_CODES.NOT_AUTHENTICATED
+        );
       }
 
       const user = await userService.getUserById(req.user.id);
@@ -19,8 +26,8 @@ class UserController {
       res.status(200).json({
         success: true,
         data: {
-          user
-        }
+          user,
+        },
       });
     } catch (error) {
       next(error);
@@ -30,4 +37,3 @@ class UserController {
 
 // Export singleton instance
 export default new UserController();
-

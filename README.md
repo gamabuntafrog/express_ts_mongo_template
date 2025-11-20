@@ -1,6 +1,6 @@
 # Backend Server
 
-Express.js server with TypeScript and MongoDB (Mongoose) for authentication.
+Express.js server with TypeScript and MongoDB (native driver) for authentication.
 
 ## Installation
 
@@ -55,7 +55,8 @@ npm start
 
 - Express.js
 - TypeScript
-- MongoDB (Mongoose)
+- MongoDB (native driver)
+- Zod for schema validation
 - JWT for authentication
 - bcryptjs for password hashing
 

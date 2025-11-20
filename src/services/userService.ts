@@ -1,4 +1,4 @@
-import User from '../models/User';
+import userRepository from '../repositories/UserRepository';
 import { NotFoundError } from '../errors/AppError';
 import { ERROR_CODES } from '../constants/errorCodes';
 
@@ -13,8 +13,8 @@ class UserService {
    * @throws NotFoundError if user not found
    */
   public async getUserById(userId: string): Promise<UserData> {
-    const user = await User.findById(userId).select('-password');
-    
+    const user = await userRepository.findById(userId);
+
     if (!user) {
       throw new NotFoundError('User not found', ERROR_CODES.USER_NOT_FOUND);
     }

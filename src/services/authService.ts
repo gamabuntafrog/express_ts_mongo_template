@@ -1,4 +1,4 @@
-import User from '../models/User';
+import userRepository from '../repositories/UserRepository';
 import { ConflictError, UnauthorizedError } from '../errors/AppError';
 import authHelper from '../helpers/authHelper';
 import { ERROR_CODES } from '../constants/errorCodes';
@@ -28,7 +28,7 @@ class AuthService {
    */
   public async register(data: RegisterData): Promise<AuthResult> {
     // Check if user already exists
-    const existingUser = await User.findOne({ email: data.email });
+    const existingUser = await userRepository.findByEmail(data.email);
     if (existingUser) {
       throw new ConflictError('User with this email already exists', ERROR_CODES.USER_ALREADY_EXISTS);
     }
@@ -37,8 +37,7 @@ class AuthService {
     const hashedPassword = await authHelper.hashPassword(data.password);
 
     // Create new user
-    const user = new User({ email: data.email, password: hashedPassword });
-    await user.save();
+    const user = await userRepository.create({ email: data.email, password: hashedPassword });
 
     // Generate token
     const token = authHelper.generateToken(user._id.toString());
@@ -58,7 +57,7 @@ class AuthService {
    */
   public async login(data: LoginData): Promise<AuthResult> {
     // Find user
-    const user = await User.findOne({ email: data.email });
+    const user = await userRepository.findByEmail(data.email);
     if (!user) {
       throw new UnauthorizedError('Invalid email or password', ERROR_CODES.INVALID_CREDENTIALS);
     }

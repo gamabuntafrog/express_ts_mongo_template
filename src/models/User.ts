@@ -1,27 +1,27 @@
-import mongoose, { Document, Schema } from 'mongoose';
+import { z } from 'zod';
+import { ObjectId } from 'mongodb';
 
-export interface IUser extends Document {
-  email: string;
-  password: string;
-}
-
-const UserSchema: Schema = new Schema({
-  email: {
-    type: String,
-    required: [true, 'Email is required'],
-    unique: true,
-    lowercase: true,
-    trim: true,
-    match: [/^\S+@\S+\.\S+$/, 'Please provide a valid email']
-  },
-  password: {
-    type: String,
-    required: [true, 'Password is required'],
-    minlength: [6, 'Password must be at least 6 characters']
-  }
-}, {
-  timestamps: true
+// Zod schema for User validation
+export const UserSchema = z.object({
+  email: z.string()
+    .email('Please provide a valid email')
+    .toLowerCase()
+    .trim(),
+  password: z.string()
+    .min(6, 'Password must be at least 6 characters'),
 });
 
-export default mongoose.model<IUser>('User', UserSchema);
+// Zod schema for User document (includes _id and timestamps)
+export const UserDocumentSchema = UserSchema.extend({
+  _id: z.instanceof(ObjectId),
+  createdAt: z.date(),
+  updatedAt: z.date(),
+});
+
+// TypeScript types inferred from zod schemas
+export type IUser = z.infer<typeof UserSchema>;
+export type IUserDocument = z.infer<typeof UserDocumentSchema>;
+
+// User input type (for creating users)
+export type CreateUserInput = z.infer<typeof UserSchema>;
 

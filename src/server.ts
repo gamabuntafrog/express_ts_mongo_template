@@ -3,6 +3,7 @@ import cors from 'cors';
 import config from './config/config';
 import logger from './config/logger';
 import connectDB from './config/database';
+import userRepository from './repositories/UserRepository';
 import authRoutes from './routes/authRoutes';
 import userRoutes from './routes/userRoutes';
 import { errorHandler } from './middleware/errorHandler';
@@ -15,8 +16,11 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Connect to MongoDB
-connectDB();
+// Connect to MongoDB and initialize indexes
+(async () => {
+  await connectDB();
+  await userRepository.createIndexes();
+})();
 
 // Routes
 app.use('/api/auth', authRoutes);
