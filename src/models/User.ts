@@ -25,3 +25,9 @@ export type IUserDocument = z.infer<typeof UserDocumentSchema>;
 // User input type (for creating users)
 export type CreateUserInput = z.infer<typeof UserSchema>;
 
+// Zod schema for User update validation (partial schema)
+export const UpdateUserSchema = UserSchema.partial();
+
+// User update input type
+export type UpdateUserInput = z.infer<typeof UpdateUserSchema>;
+
