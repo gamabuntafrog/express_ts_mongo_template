@@ -2,7 +2,7 @@ import express, { Application, Request, Response } from 'express';
 import cors from 'cors';
 import config from '@config/config';
 import logger from '@config/logger';
-import connectDB, { getDb } from '@config/database';
+import connectDB from '@config/database';
 import UserRepository from '@repositories/UserRepository';
 import AuthService from '@services/authService';
 import UserService from '@services/userService';
@@ -21,10 +21,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Connect to MongoDB
-await connectDB();
+const db = await connectDB();
 
 // Initialize repositories with database collections
-const userRepository = new UserRepository(getDb().collection('users'));
+const userRepository = new UserRepository(db.collection('users'));
 await userRepository.createIndexes();
 
 // Initialize services with repositories

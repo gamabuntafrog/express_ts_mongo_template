@@ -5,7 +5,7 @@ import logger from '@config/logger';
 let client: MongoClient | null = null;
 let db: Db | null = null;
 
-async function connectDB(): Promise<void> {
+async function connectDB(): Promise<Db> {
   try {
     client = new MongoClient(config.MONGODB_URI);
     await client.connect();
@@ -17,17 +17,11 @@ async function connectDB(): Promise<void> {
     db = client.db(dbName);
     
     logger.info('MongoDB connected successfully');
+    return db;
   } catch (error) {
     logger.error({ error }, 'MongoDB connection error');
     process.exit(1);
   }
-}
-
-export function getDb(): Db {
-  if (!db) {
-    throw new Error('Database not initialized. Call connectDB() first.');
-  }
-  return db;
 }
 
 export function getClient(): MongoClient {
