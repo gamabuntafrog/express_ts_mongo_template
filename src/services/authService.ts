@@ -1,4 +1,4 @@
-import userRepository from '@repositories/UserRepository';
+import UserRepository from '@repositories/UserRepository';
 import { ConflictError, UnauthorizedError } from '@errors/AppError';
 import authHelper from '@helpers/authHelper';
 import { ERROR_CODES } from '@constants/errorCodes';
@@ -22,13 +22,15 @@ export interface AuthResult {
 }
 
 class AuthService {
+  constructor(private readonly userRepository: UserRepository) {}
+
   /**
    * Register new user
    * @throws ConflictError if user already exists
    */
   public async register(data: RegisterData): Promise<AuthResult> {
     // Check if user already exists
-    const existingUser = await userRepository.findByEmail(data.email);
+    const existingUser = await this.userRepository.findByEmail(data.email);
     if (existingUser) {
       throw new ConflictError('User with this email already exists', ERROR_CODES.USER_ALREADY_EXISTS);
     }
@@ -37,7 +39,7 @@ class AuthService {
     const hashedPassword = await authHelper.hashPassword(data.password);
 
     // Create new user
-    const user = await userRepository.create({ email: data.email, password: hashedPassword });
+    const user = await this.userRepository.create({ email: data.email, password: hashedPassword });
 
     // Generate token
     const token = authHelper.generateToken(user._id.toString());
@@ -57,7 +59,7 @@ class AuthService {
    */
   public async login(data: LoginData): Promise<AuthResult> {
     // Find user
-    const user = await userRepository.findByEmail(data.email);
+    const user = await this.userRepository.findByEmail(data.email);
     if (!user) {
       throw new UnauthorizedError('Invalid email or password', ERROR_CODES.INVALID_CREDENTIALS);
     }
@@ -81,6 +83,5 @@ class AuthService {
   }
 }
 
-// Export singleton instance
-export default new AuthService();
+export default AuthService;
 

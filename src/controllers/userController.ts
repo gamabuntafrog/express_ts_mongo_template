@@ -1,10 +1,12 @@
 import { Response, NextFunction } from "express";
 import { AuthRequest } from "@typings/express";
-import userService from "@services/userService";
+import UserService from "@services/userService";
 import { UnauthorizedError } from "@errors/AppError";
 import { ERROR_CODES } from "@constants/errorCodes";
 
 class UserController {
+  constructor(private readonly userService: UserService) {}
+
   /**
    * Get current authenticated user
    */
@@ -21,7 +23,7 @@ class UserController {
         );
       }
 
-      const user = await userService.getUserById(req.user.id);
+      const user = await this.userService.getUserById(req.user.id);
 
       res.status(200).json({
         success: true,
@@ -35,5 +37,4 @@ class UserController {
   }
 }
 
-// Export singleton instance
-export default new UserController();
+export default UserController;

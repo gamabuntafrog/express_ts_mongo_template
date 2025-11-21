@@ -1,6 +1,5 @@
 import { ObjectId, Collection, Filter } from 'mongodb';
 import { z } from 'zod';
-import { getDb } from '@config/database';
 import { IRepository } from '@repositories/IRepository';
 
 /**
@@ -10,30 +9,23 @@ import { IRepository } from '@repositories/IRepository';
 export abstract class BaseRepository<T extends { _id: ObjectId }, TCreate, TUpdate> 
   implements IRepository<T, TCreate, TUpdate> {
   
-  protected abstract collectionName: string;
+  protected readonly collection: Collection<T>;
   protected readonly createSchema: z.ZodSchema<TCreate>;
   protected readonly updateSchema: z.ZodSchema<TUpdate>;
 
-  constructor(createSchema: z.ZodSchema<TCreate>, updateSchema: z.ZodSchema<TUpdate>) {
+  constructor(collection: Collection<T>, createSchema: z.ZodSchema<TCreate>, updateSchema: z.ZodSchema<TUpdate>) {
+    this.collection = collection;
     this.createSchema = createSchema;
     this.updateSchema = updateSchema;
-  }
-
-  /**
-   * Get the MongoDB collection for this repository
-   */
-  protected getCollection(): Collection<T> {
-    return getDb().collection<T>(this.collectionName);
   }
 
   /**
    * Find a document by its ID
    */
   public async findById(id: string): Promise<T | null> {
-    const collection = this.getCollection();
     try {
       const objectId = new ObjectId(id);
-      return await collection.findOne({ _id: objectId } as any) as T | null;
+      return await this.collection.findOne({ _id: objectId } as any) as T | null;
     } catch (error) {
       return null;
     }
@@ -47,8 +39,6 @@ export abstract class BaseRepository<T extends { _id: ObjectId }, TCreate, TUpda
     // Validate input with schema before creating
     const validatedData = this.createSchema.parse(data);
     
-    const collection = this.getCollection();
-    
     const now = new Date();
     const document = {
       ...validatedData,
@@ -56,8 +46,8 @@ export abstract class BaseRepository<T extends { _id: ObjectId }, TCreate, TUpda
       updatedAt: now,
     };
 
-    const result = await collection.insertOne(document as any);
-    const insertedDoc = await collection.findOne({ _id: result.insertedId }  as Filter<T>) as T | null;
+    const result = await this.collection.insertOne(document as any);
+    const insertedDoc = await this.collection.findOne({ _id: result.insertedId }  as Filter<T>) as T | null;
     
     if (!insertedDoc) {
       throw new Error('Failed to create document');
@@ -74,7 +64,6 @@ export abstract class BaseRepository<T extends { _id: ObjectId }, TCreate, TUpda
     // Validate input with schema before updating
     const validatedData = this.updateSchema.parse(data);
     
-    const collection = this.getCollection();
     try {
       const objectId = new ObjectId(id);
 
@@ -83,12 +72,12 @@ export abstract class BaseRepository<T extends { _id: ObjectId }, TCreate, TUpda
         updatedAt: new Date(),
       };
 
-      await collection.updateOne(
+      await this.collection.updateOne(
         { _id: objectId } as any,
         { $set: updateData }
       );
 
-      return await collection.findOne({ _id: objectId }  as Filter<T>) as T | null;
+      return await this.collection.findOne({ _id: objectId }  as Filter<T>) as T | null;
     } catch (error) {
       return null;
     }
@@ -98,10 +87,9 @@ export abstract class BaseRepository<T extends { _id: ObjectId }, TCreate, TUpda
    * Delete a document by ID
    */
   public async deleteById(id: string): Promise<boolean> {
-    const collection = this.getCollection();
     try {
       const objectId = new ObjectId(id);
-      const result = await collection.deleteOne({ _id: objectId } as Filter<T>);
+      const result = await this.collection.deleteOne({ _id: objectId } as Filter<T>);
       return result.deletedCount > 0;
     } catch (error) {
       return false;

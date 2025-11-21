@@ -1,11 +1,13 @@
 import { Router } from 'express';
-import userController from '@controllers/userController';
+import UserController from '@controllers/userController';
 import { authenticate } from '@middleware/authMiddleware';
 
-const router = Router();
+export default function createUserRoutes(userController: UserController): Router {
+  const router = Router();
 
-// Protected routes
-router.get('/me', authenticate, userController.getCurrentUser);
+  // Protected routes
+  router.get('/me', authenticate, userController.getCurrentUser.bind(userController));
 
-export default router;
+  return router;
+}
 

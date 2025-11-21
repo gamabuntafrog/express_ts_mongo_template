@@ -1,19 +1,17 @@
+import { Collection } from 'mongodb';
 import { BaseRepository } from '@repositories/BaseRepository';
 import { IUserDocument, CreateUserInput, UpdateUserInput, UserSchema, UpdateUserSchema } from '@models/User';
 
 class UserRepository extends BaseRepository<IUserDocument, CreateUserInput, UpdateUserInput> {
-  protected collectionName = 'users';
-
-  constructor() {
-    super(UserSchema, UpdateUserSchema);
+  constructor(collection: Collection<IUserDocument>) {
+    super(collection, UserSchema, UpdateUserSchema);
   }
 
   /**
    * Create a unique index on email field
    */
   public async createIndexes(): Promise<void> {
-    const collection = this.getCollection();
-    await collection.createIndex({ email: 1 }, { unique: true });
+    await this.collection.createIndex({ email: 1 }, { unique: true });
   }
 
   /**
@@ -21,12 +19,10 @@ class UserRepository extends BaseRepository<IUserDocument, CreateUserInput, Upda
    * This is a UserRepository-specific method
    */
   public async findByEmail(email: string): Promise<IUserDocument | null> {
-    const collection = this.getCollection();
-    return await collection.findOne({ email: email.toLowerCase().trim() });
+    return await this.collection.findOne({ email: email.toLowerCase().trim() });
   }
 
 }
 
-// Export singleton instance
-export default new UserRepository();
+export default UserRepository;
 
