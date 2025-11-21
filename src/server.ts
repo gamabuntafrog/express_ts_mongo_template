@@ -10,9 +10,9 @@ import AuthController from "@controllers/authController";
 import UserController from "@controllers/userController";
 import createAuthRoutes from "@routes/authRoutes";
 import createUserRoutes from "@routes/userRoutes";
-import { errorHandler } from "@middleware/errorHandler";
-import { corsMiddleware } from "@middleware/corsMiddleware";
-import { requestLogger } from "@middleware/requestLogger";
+import { errorHandler } from "@middleware/global/errorHandler";
+import { corsMiddleware } from "@middleware/global/corsMiddleware";
+import { requestLogger } from "@middleware/global/requestLogger";
 import { ERROR_CODES } from "@constants/errorCodes";
 
 const app: Application = express();
