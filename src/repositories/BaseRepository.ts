@@ -1,4 +1,9 @@
-import { ObjectId, Collection, Filter } from "mongodb";
+import {
+  ObjectId,
+  Collection,
+  Filter,
+  OptionalUnlessRequiredId,
+} from "mongodb";
 import { z } from "zod";
 import { IRepository } from "@repositories/IRepository";
 
@@ -34,7 +39,7 @@ export abstract class BaseRepository<
       const objectId = new ObjectId(id);
       return (await this.collection.findOne({
         _id: objectId,
-      } as any)) as T | null;
+      } as Filter<T>)) as T | null;
     } catch (error) {
       return null;
     }
@@ -55,7 +60,9 @@ export abstract class BaseRepository<
       updatedAt: now,
     };
 
-    const result = await this.collection.insertOne(document as any);
+    const result = await this.collection.insertOne(
+      document as OptionalUnlessRequiredId<T>
+    );
     const insertedDoc = (await this.collection.findOne({
       _id: result.insertedId,
     } as Filter<T>)) as T | null;
@@ -78,12 +85,12 @@ export abstract class BaseRepository<
     try {
       const objectId = new ObjectId(id);
 
-      const updateData: any = {
+      const updateData: Partial<T> = {
         ...validatedData,
         updatedAt: new Date(),
-      };
+      } as Partial<T>;
 
-      await this.collection.updateOne({ _id: objectId } as any, {
+      await this.collection.updateOne({ _id: objectId } as Filter<T>, {
         $set: updateData,
       });
 

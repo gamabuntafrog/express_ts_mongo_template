@@ -36,12 +36,12 @@ export function authenticate(
       };
 
       next();
-    } catch (jwtError: any) {
-      if (jwtError.name === "JsonWebTokenError") {
+    } catch (jwtError: unknown) {
+      if (jwtError instanceof Error && jwtError.name === "JsonWebTokenError") {
         throw new UnauthorizedError("Invalid token", ERROR_CODES.INVALID_TOKEN);
       }
 
-      if (jwtError.name === "TokenExpiredError") {
+      if (jwtError instanceof Error && jwtError.name === "TokenExpiredError") {
         throw new UnauthorizedError("Token expired", ERROR_CODES.TOKEN_EXPIRED);
       }
 
