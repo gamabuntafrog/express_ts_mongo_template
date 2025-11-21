@@ -17,6 +17,9 @@ class Config {
   // Logger configuration
   public readonly LOG_LEVEL: string;
 
+  // CORS configuration
+  public readonly FRONTEND_ORIGINS: string[];
+
   private static instance: Config;
 
   private constructor() {
@@ -32,6 +35,10 @@ class Config {
 
     // Logger
     this.LOG_LEVEL = process.env.LOG_LEVEL || (this.NODE_ENV === 'development' ? 'debug' : 'info');
+
+    // CORS - Parse comma-separated origins or use default
+    const frontendOriginsEnv = process.env.FRONTEND_ORIGIN || 'http://localhost:3000';
+    this.FRONTEND_ORIGINS = frontendOriginsEnv.split(',').map(origin => origin.trim());
 
     // Validate required environment variables
     this.validate();

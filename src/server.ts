@@ -1,5 +1,4 @@
 import express, { Application, Request, Response } from 'express';
-import cors from 'cors';
 import config from '@config/config';
 import logger from '@config/logger';
 import connectDB from '@config/database';
@@ -11,12 +10,13 @@ import UserController from '@controllers/userController';
 import createAuthRoutes from '@routes/authRoutes';
 import createUserRoutes from '@routes/userRoutes';
 import { errorHandler } from '@middleware/errorHandler';
+import { corsMiddleware } from '@middleware/corsMiddleware';
 import { ERROR_CODES } from '@constants/errorCodes';
 
 const app: Application = express();
 
 // Middleware
-app.use(cors());
+app.use(corsMiddleware);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
