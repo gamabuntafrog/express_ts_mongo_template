@@ -29,7 +29,7 @@ class UserRepository extends BaseRepository<
    * This is a UserRepository-specific method
    */
   public async findByEmail(email: string): Promise<IUserDocument | null> {
-    return await this.collection.findOne({ email: email.toLowerCase().trim() });
+    return await this.findOne({ email: email.toLowerCase().trim() });
   }
 }
 

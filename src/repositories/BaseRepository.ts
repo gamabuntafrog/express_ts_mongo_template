@@ -3,6 +3,7 @@ import {
   Collection,
   Filter,
   OptionalUnlessRequiredId,
+  FindOptions,
 } from "mongodb";
 import { z } from "zod";
 import { IRepository } from "@repositories/IRepository";
@@ -37,12 +38,38 @@ export abstract class BaseRepository<
   public async findById(id: string): Promise<T | null> {
     try {
       const objectId = new ObjectId(id);
-      return (await this.collection.findOne({
+
+      const result = await this.collection.findOne({
         _id: objectId,
-      } as Filter<T>)) as T | null;
+      } as Filter<T>);
+
+      return result as T | null;
     } catch (error) {
       return null;
     }
+  }
+
+  /**
+   * Find a single document matching the filter
+   */
+  public async findOne(filter: Filter<T>): Promise<T | null> {
+    const result = await this.collection.findOne(filter);
+
+    return result as T | null;
+  }
+
+  /**
+   * Find multiple documents matching the filter
+   */
+  public async findMany(
+    filter: Filter<T>,
+    options?: FindOptions
+  ): Promise<T[]> {
+    const cursor = this.collection.find(filter, options);
+
+    const result = await cursor.toArray();
+
+    return result as T[];
   }
 
   /**
@@ -108,9 +135,11 @@ export abstract class BaseRepository<
   public async deleteById(id: string): Promise<boolean> {
     try {
       const objectId = new ObjectId(id);
+
       const result = await this.collection.deleteOne({
         _id: objectId,
       } as Filter<T>);
+
       return result.deletedCount > 0;
     } catch (error) {
       return false;
