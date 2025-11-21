@@ -1,8 +1,8 @@
 import { Response, NextFunction } from "express";
-import { AuthRequest } from "../types/express";
-import userService from "../services/userService";
-import { UnauthorizedError } from "../errors/AppError";
-import { ERROR_CODES } from "../constants/errorCodes";
+import { AuthRequest } from "@typings/express";
+import userService from "@services/userService";
+import { UnauthorizedError } from "@errors/AppError";
+import { ERROR_CODES } from "@constants/errorCodes";
 
 class UserController {
   /**

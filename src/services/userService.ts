@@ -1,6 +1,6 @@
-import userRepository from '../repositories/UserRepository';
-import { NotFoundError } from '../errors/AppError';
-import { ERROR_CODES } from '../constants/errorCodes';
+import userRepository from '@repositories/UserRepository';
+import { NotFoundError } from '@errors/AppError';
+import { ERROR_CODES } from '@constants/errorCodes';
 
 export interface UserData {
   id: string;

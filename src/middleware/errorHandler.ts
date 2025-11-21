@@ -1,8 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
-import { AppError } from '../errors/AppError';
-import config from '../config/config';
-import logger from '../config/logger';
-import { ERROR_CODES } from '../constants/errorCodes';
+import { AppError } from '@errors/AppError';
+import config from '@config/config';
+import logger from '@config/logger';
+import { ERROR_CODES } from '@constants/errorCodes';
 
 export function errorHandler(
   err: Error,

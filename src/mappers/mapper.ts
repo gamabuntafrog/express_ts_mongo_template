@@ -1,7 +1,7 @@
 import { Request } from 'express';
 import { ObjectSchema } from 'joi';
-import { ValidationError } from '../errors/AppError';
-import { ERROR_CODES } from '../constants/errorCodes';
+import { ValidationError } from '@errors/AppError';
+import { ERROR_CODES } from '@constants/errorCodes';
 
 class Mapper {
   /**

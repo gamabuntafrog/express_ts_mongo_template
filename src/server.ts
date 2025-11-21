@@ -1,13 +1,13 @@
 import express, { Application, Request, Response } from 'express';
 import cors from 'cors';
-import config from './config/config';
-import logger from './config/logger';
-import connectDB from './config/database';
-import userRepository from './repositories/UserRepository';
-import authRoutes from './routes/authRoutes';
-import userRoutes from './routes/userRoutes';
-import { errorHandler } from './middleware/errorHandler';
-import { ERROR_CODES } from './constants/errorCodes';
+import config from '@config/config';
+import logger from '@config/logger';
+import connectDB from '@config/database';
+import userRepository from '@repositories/UserRepository';
+import authRoutes from '@routes/authRoutes';
+import userRoutes from '@routes/userRoutes';
+import { errorHandler } from '@middleware/errorHandler';
+import { ERROR_CODES } from '@constants/errorCodes';
 
 const app: Application = express();
 
@@ -16,11 +16,9 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Connect to MongoDB and initialize indexes
-(async () => {
-  await connectDB();
-  await userRepository.createIndexes();
-})();
+// Connect to MongoDB and initialize indexes using top-level await
+await connectDB();
+await userRepository.createIndexes();
 
 // Routes
 app.use('/api/auth', authRoutes);

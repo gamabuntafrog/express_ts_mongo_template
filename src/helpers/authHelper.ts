@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
-import config from '../config/config';
+import config from '@config/config';
 
 class AuthHelper {
   private readonly JWT_SECRET: string;

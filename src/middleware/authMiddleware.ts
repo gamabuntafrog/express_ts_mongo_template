@@ -1,9 +1,9 @@
 import { Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import { AuthRequest } from '../types/express';
-import { UnauthorizedError } from '../errors/AppError';
-import config from '../config/config';
-import { ERROR_CODES } from '../constants/errorCodes';
+import { AuthRequest } from '@typings/express';
+import { UnauthorizedError } from '@errors/AppError';
+import config from '@config/config';
+import { ERROR_CODES } from '@constants/errorCodes';
 
 export function authenticate(req: AuthRequest, res: Response, next: NextFunction): void {
   try {

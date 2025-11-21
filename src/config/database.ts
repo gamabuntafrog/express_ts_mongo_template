@@ -1,6 +1,6 @@
 import { MongoClient, Db } from 'mongodb';
-import config from './config';
-import logger from './logger';
+import config from '@config/config';
+import logger from '@config/logger';
 
 let client: MongoClient | null = null;
 let db: Db | null = null;

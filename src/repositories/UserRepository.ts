@@ -1,5 +1,5 @@
-import { BaseRepository } from './BaseRepository';
-import { IUserDocument, CreateUserInput, UpdateUserInput, UserSchema, UpdateUserSchema } from '../models/User';
+import { BaseRepository } from '@repositories/BaseRepository';
+import { IUserDocument, CreateUserInput, UpdateUserInput, UserSchema, UpdateUserSchema } from '@models/User';
 
 class UserRepository extends BaseRepository<IUserDocument, CreateUserInput, UpdateUserInput> {
   protected collectionName = 'users';

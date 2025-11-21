@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
-import authService from '../services/authService';
-import mapper from '../mappers/mapper';
-import { registerSchema, loginSchema } from '../validators/authValidator';
+import authService from '@services/authService';
+import mapper from '@mappers/mapper';
+import { registerSchema, loginSchema } from '@validators/authValidator';
 
 class AuthController {
   /**

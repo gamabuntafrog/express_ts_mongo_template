@@ -1,7 +1,7 @@
-import userRepository from '../repositories/UserRepository';
-import { ConflictError, UnauthorizedError } from '../errors/AppError';
-import authHelper from '../helpers/authHelper';
-import { ERROR_CODES } from '../constants/errorCodes';
+import userRepository from '@repositories/UserRepository';
+import { ConflictError, UnauthorizedError } from '@errors/AppError';
+import authHelper from '@helpers/authHelper';
+import { ERROR_CODES } from '@constants/errorCodes';
 
 export interface RegisterData {
   email: string;

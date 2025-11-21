@@ -1,7 +1,7 @@
 import { ObjectId, Collection, Filter } from 'mongodb';
 import { z } from 'zod';
-import { getDb } from '../config/database';
-import { IRepository } from './IRepository';
+import { getDb } from '@config/database';
+import { IRepository } from '@repositories/IRepository';
 
 /**
  * Abstract base repository class
