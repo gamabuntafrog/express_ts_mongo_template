@@ -37,7 +37,7 @@ class Config {
     this.LOG_LEVEL = process.env.LOG_LEVEL || (this.NODE_ENV === 'development' ? 'debug' : 'info');
 
     // CORS - Parse comma-separated origins or use default
-    const frontendOriginsEnv = process.env.FRONTEND_ORIGIN || 'http://localhost:3000';
+    const frontendOriginsEnv = process.env.FRONTEND_ORIGIN || 'http://localhost:3001';
     this.FRONTEND_ORIGINS = frontendOriginsEnv.split(',').map(origin => origin.trim());
 
     // Validate required environment variables
