@@ -145,10 +145,4 @@ export abstract class BaseRepository<
       return false;
     }
   }
-
-  /**
-   * Initialize indexes for the collection
-   * Subclasses should override this to define their specific indexes
-   */
-  public abstract createIndexes(): Promise<void>;
 }

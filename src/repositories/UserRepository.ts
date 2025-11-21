@@ -1,5 +1,6 @@
-import { Collection } from "mongodb";
+import { Collection, IndexDescription } from "mongodb";
 import { BaseRepository } from "@repositories/BaseRepository";
+import { indexRegistry } from "@db/indexes/IndexRegistry";
 import {
   IUserDocument,
   CreateUserInput,
@@ -13,15 +14,16 @@ class UserRepository extends BaseRepository<
   CreateUserInput,
   UpdateUserInput
 > {
+  static readonly collectionName = "users";
+  static readonly indexes: IndexDescription[] = [
+    {
+      key: { email: 1 },
+      unique: true,
+    },
+  ];
+
   constructor(collection: Collection<IUserDocument>) {
     super(collection, UserSchema, UpdateUserSchema);
-  }
-
-  /**
-   * Create a unique index on email field
-   */
-  public async createIndexes(): Promise<void> {
-    await this.collection.createIndex({ email: 1 }, { unique: true });
   }
 
   /**
@@ -32,5 +34,8 @@ class UserRepository extends BaseRepository<
     return await this.findOne({ email: email.toLowerCase().trim() });
   }
 }
+
+// Register indexes when importing the module
+indexRegistry.register(UserRepository.collectionName, UserRepository.indexes);
 
 export default UserRepository;

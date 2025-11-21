@@ -28,7 +28,8 @@
       "@errors/*": ["errors/*"],
       "@helpers/*": ["helpers/*"],
       "@validators/*": ["validators/*"],
-      "@mappers/*": ["mappers/*"]
+      "@mappers/*": ["mappers/*"],
+      "@db/*": ["db/*"]
     }
   },
   "include": ["src/**/*"],

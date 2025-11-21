@@ -1,8 +1,9 @@
 import express, { Application, Request, Response } from "express";
 import config from "@config/config";
 import logger from "@config/logger";
-import connectDB from "@config/database";
+import connectDB from "@db/database";
 import UserRepository from "@repositories/UserRepository";
+import { indexManager } from "@db/indexes/IndexManager";
 import AuthService from "@services/authService";
 import UserService from "@services/userService";
 import AuthController from "@controllers/authController";
@@ -26,8 +27,11 @@ app.use(express.urlencoded({ extended: true }));
 const db = await connectDB();
 
 // Initialize repositories with database collections
+// Repositories will register their indexes during construction
 const userRepository = new UserRepository(db.collection("users"));
-await userRepository.createIndexes();
+
+// Create all registered indexes centrally
+await indexManager.createAllIndexes(db);
 
 // Initialize services with repositories
 const authService = new AuthService(userRepository);

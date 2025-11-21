@@ -34,9 +34,4 @@ export interface IRepository<T, TCreate, TUpdate> {
    * Delete a document by ID
    */
   deleteById(id: string): Promise<boolean>;
-
-  /**
-   * Initialize indexes for the collection
-   */
-  createIndexes(): Promise<void>;
 }
