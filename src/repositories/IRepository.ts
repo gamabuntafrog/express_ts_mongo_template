@@ -28,5 +28,3 @@ export interface IRepository<T, TCreate, TUpdate> {
    */
   createIndexes(): Promise<void>;
 }
-
-

@@ -1,4 +1,4 @@
-import { Request } from 'express';
+import { Request } from "express";
 
 declare global {
   namespace Express {
@@ -17,4 +17,3 @@ export interface AuthRequest extends Request {
     email: string;
   };
 }
-

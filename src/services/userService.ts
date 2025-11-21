@@ -1,6 +1,6 @@
-import UserRepository from '@repositories/UserRepository';
-import { NotFoundError } from '@errors/AppError';
-import { ERROR_CODES } from '@constants/errorCodes';
+import UserRepository from "@repositories/UserRepository";
+import { NotFoundError } from "@errors/AppError";
+import { ERROR_CODES } from "@constants/errorCodes";
 
 export interface UserData {
   id: string;
@@ -18,15 +18,14 @@ class UserService {
     const user = await this.userRepository.findById(userId);
 
     if (!user) {
-      throw new NotFoundError('User not found', ERROR_CODES.USER_NOT_FOUND);
+      throw new NotFoundError("User not found", ERROR_CODES.USER_NOT_FOUND);
     }
 
     return {
       id: user._id.toString(),
-      email: user.email
+      email: user.email,
     };
   }
 }
 
 export default UserService;
-

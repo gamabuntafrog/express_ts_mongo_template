@@ -1,14 +1,10 @@
-import { z } from 'zod';
-import { ObjectId } from 'mongodb';
+import { z } from "zod";
+import { ObjectId } from "mongodb";
 
 // Zod schema for User validation
 export const UserSchema = z.object({
-  email: z.string()
-    .email('Please provide a valid email')
-    .toLowerCase()
-    .trim(),
-  password: z.string()
-    .min(6, 'Password must be at least 6 characters'),
+  email: z.string().email("Please provide a valid email").toLowerCase().trim(),
+  password: z.string().min(6, "Password must be at least 6 characters"),
 });
 
 // Zod schema for User document (includes _id and timestamps)
@@ -30,4 +26,3 @@ export const UpdateUserSchema = UserSchema.partial();
 
 // User update input type
 export type UpdateUserInput = z.infer<typeof UpdateUserSchema>;
-

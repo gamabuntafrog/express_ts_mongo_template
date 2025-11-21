@@ -1,19 +1,26 @@
-import { ObjectId, Collection, Filter } from 'mongodb';
-import { z } from 'zod';
-import { IRepository } from '@repositories/IRepository';
+import { ObjectId, Collection, Filter } from "mongodb";
+import { z } from "zod";
+import { IRepository } from "@repositories/IRepository";
 
 /**
  * Abstract base repository class
  * Implements common CRUD operations that can be reused by all repositories
  */
-export abstract class BaseRepository<T extends { _id: ObjectId }, TCreate, TUpdate> 
-  implements IRepository<T, TCreate, TUpdate> {
-  
+export abstract class BaseRepository<
+  T extends { _id: ObjectId },
+  TCreate,
+  TUpdate,
+> implements IRepository<T, TCreate, TUpdate>
+{
   protected readonly collection: Collection<T>;
   protected readonly createSchema: z.ZodSchema<TCreate>;
   protected readonly updateSchema: z.ZodSchema<TUpdate>;
 
-  constructor(collection: Collection<T>, createSchema: z.ZodSchema<TCreate>, updateSchema: z.ZodSchema<TUpdate>) {
+  constructor(
+    collection: Collection<T>,
+    createSchema: z.ZodSchema<TCreate>,
+    updateSchema: z.ZodSchema<TUpdate>
+  ) {
     this.collection = collection;
     this.createSchema = createSchema;
     this.updateSchema = updateSchema;
@@ -25,7 +32,9 @@ export abstract class BaseRepository<T extends { _id: ObjectId }, TCreate, TUpda
   public async findById(id: string): Promise<T | null> {
     try {
       const objectId = new ObjectId(id);
-      return await this.collection.findOne({ _id: objectId } as any) as T | null;
+      return (await this.collection.findOne({
+        _id: objectId,
+      } as any)) as T | null;
     } catch (error) {
       return null;
     }
@@ -38,7 +47,7 @@ export abstract class BaseRepository<T extends { _id: ObjectId }, TCreate, TUpda
   public async create(data: TCreate): Promise<T> {
     // Validate input with schema before creating
     const validatedData = this.createSchema.parse(data);
-    
+
     const now = new Date();
     const document = {
       ...validatedData,
@@ -47,10 +56,12 @@ export abstract class BaseRepository<T extends { _id: ObjectId }, TCreate, TUpda
     };
 
     const result = await this.collection.insertOne(document as any);
-    const insertedDoc = await this.collection.findOne({ _id: result.insertedId }  as Filter<T>) as T | null;
-    
+    const insertedDoc = (await this.collection.findOne({
+      _id: result.insertedId,
+    } as Filter<T>)) as T | null;
+
     if (!insertedDoc) {
-      throw new Error('Failed to create document');
+      throw new Error("Failed to create document");
     }
 
     return insertedDoc;
@@ -63,7 +74,7 @@ export abstract class BaseRepository<T extends { _id: ObjectId }, TCreate, TUpda
   public async updateById(id: string, data: TUpdate): Promise<T | null> {
     // Validate input with schema before updating
     const validatedData = this.updateSchema.parse(data);
-    
+
     try {
       const objectId = new ObjectId(id);
 
@@ -72,12 +83,13 @@ export abstract class BaseRepository<T extends { _id: ObjectId }, TCreate, TUpda
         updatedAt: new Date(),
       };
 
-      await this.collection.updateOne(
-        { _id: objectId } as any,
-        { $set: updateData }
-      );
+      await this.collection.updateOne({ _id: objectId } as any, {
+        $set: updateData,
+      });
 
-      return await this.collection.findOne({ _id: objectId }  as Filter<T>) as T | null;
+      return (await this.collection.findOne({
+        _id: objectId,
+      } as Filter<T>)) as T | null;
     } catch (error) {
       return null;
     }
@@ -89,7 +101,9 @@ export abstract class BaseRepository<T extends { _id: ObjectId }, TCreate, TUpda
   public async deleteById(id: string): Promise<boolean> {
     try {
       const objectId = new ObjectId(id);
-      const result = await this.collection.deleteOne({ _id: objectId } as Filter<T>);
+      const result = await this.collection.deleteOne({
+        _id: objectId,
+      } as Filter<T>);
       return result.deletedCount > 0;
     } catch (error) {
       return false;
@@ -102,4 +116,3 @@ export abstract class BaseRepository<T extends { _id: ObjectId }, TCreate, TUpda
    */
   public abstract createIndexes(): Promise<void>;
 }
-

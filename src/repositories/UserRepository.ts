@@ -1,8 +1,18 @@
-import { Collection } from 'mongodb';
-import { BaseRepository } from '@repositories/BaseRepository';
-import { IUserDocument, CreateUserInput, UpdateUserInput, UserSchema, UpdateUserSchema } from '@models/User';
+import { Collection } from "mongodb";
+import { BaseRepository } from "@repositories/BaseRepository";
+import {
+  IUserDocument,
+  CreateUserInput,
+  UpdateUserInput,
+  UserSchema,
+  UpdateUserSchema,
+} from "@models/User";
 
-class UserRepository extends BaseRepository<IUserDocument, CreateUserInput, UpdateUserInput> {
+class UserRepository extends BaseRepository<
+  IUserDocument,
+  CreateUserInput,
+  UpdateUserInput
+> {
   constructor(collection: Collection<IUserDocument>) {
     super(collection, UserSchema, UpdateUserSchema);
   }
@@ -21,8 +31,6 @@ class UserRepository extends BaseRepository<IUserDocument, CreateUserInput, Upda
   public async findByEmail(email: string): Promise<IUserDocument | null> {
     return await this.collection.findOne({ email: email.toLowerCase().trim() });
   }
-
 }
 
 export default UserRepository;
-

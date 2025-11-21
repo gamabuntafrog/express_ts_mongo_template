@@ -1,7 +1,7 @@
-import { Request } from 'express';
-import { z } from 'zod';
-import { ValidationError } from '@errors/AppError';
-import { ERROR_CODES } from '@constants/errorCodes';
+import { Request } from "express";
+import { z } from "zod";
+import { ValidationError } from "@errors/AppError";
+import { ERROR_CODES } from "@constants/errorCodes";
 
 class Mapper {
   /**
@@ -10,12 +10,12 @@ class Mapper {
    * @param req - Express request object
    * @param schema - Zod validation schema
    */
-  public toDTO<T = any>(req: Request, schema: z.ZodType<T>): T {
+  public toDTO<T = unknown>(req: Request, schema: z.ZodType<T>): T {
     // Combine all request data into one object
     const dataToValidate = {
       ...req.body,
       ...req.params,
-      ...req.query
+      ...req.query,
     };
 
     // Use safeParse to handle errors gracefully
@@ -23,32 +23,38 @@ class Mapper {
       errorMap: (issue, ctx) => {
         // Return custom error messages
         return { message: ctx.defaultError };
-      }
+      },
     });
 
     if (!result.success) {
       // Get message from first error issue
-      const firstErrorMessage = result.error.errors[0]?.message || 'Validation failed';
+      const firstErrorMessage =
+        result.error.errors[0]?.message || "Validation failed";
 
-      throw new ValidationError(firstErrorMessage, ERROR_CODES.VALIDATION_ERROR);
+      throw new ValidationError(
+        firstErrorMessage,
+        ERROR_CODES.VALIDATION_ERROR
+      );
     }
 
     const value = result.data;
 
     // Update request object with normalized values
     // Separate back into body, params, and query based on what was in original request
-    const normalizedBody: any = {};
-    const normalizedParams: any = {};
-    const normalizedQuery: any = {};
+    const normalizedBody: Record<string, unknown> = {};
+    const normalizedParams: Record<string, unknown> = {};
+    const normalizedQuery: Record<string, unknown> = {};
 
     // Check original keys to determine where to put normalized values
-    Object.keys(value as object).forEach(function(key) {
+    const valueAsRecord = value as Record<string, unknown>;
+    Object.keys(valueAsRecord).forEach(function (key) {
+      const keyValue = valueAsRecord[key];
       if (key in req.params) {
-        normalizedParams[key] = (value as any)[key];
+        normalizedParams[key] = keyValue;
       } else if (key in req.query) {
-        normalizedQuery[key] = (value as any)[key];
+        normalizedQuery[key] = keyValue;
       } else {
-        normalizedBody[key] = (value as any)[key];
+        normalizedBody[key] = keyValue;
       }
     });
 
@@ -63,4 +69,3 @@ class Mapper {
 
 // Export singleton instance
 export default new Mapper();
-

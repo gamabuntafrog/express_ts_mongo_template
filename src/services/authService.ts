@@ -1,7 +1,7 @@
-import UserRepository from '@repositories/UserRepository';
-import { ConflictError, UnauthorizedError } from '@errors/AppError';
-import authHelper from '@helpers/authHelper';
-import { ERROR_CODES } from '@constants/errorCodes';
+import UserRepository from "@repositories/UserRepository";
+import { ConflictError, UnauthorizedError } from "@errors/AppError";
+import authHelper from "@helpers/authHelper";
+import { ERROR_CODES } from "@constants/errorCodes";
 
 export interface RegisterData {
   email: string;
@@ -32,14 +32,20 @@ class AuthService {
     // Check if user already exists
     const existingUser = await this.userRepository.findByEmail(data.email);
     if (existingUser) {
-      throw new ConflictError('User with this email already exists', ERROR_CODES.USER_ALREADY_EXISTS);
+      throw new ConflictError(
+        "User with this email already exists",
+        ERROR_CODES.USER_ALREADY_EXISTS
+      );
     }
 
     // Hash password before saving
     const hashedPassword = await authHelper.hashPassword(data.password);
 
     // Create new user
-    const user = await this.userRepository.create({ email: data.email, password: hashedPassword });
+    const user = await this.userRepository.create({
+      email: data.email,
+      password: hashedPassword,
+    });
 
     // Generate token
     const token = authHelper.generateToken(user._id.toString());
@@ -48,8 +54,8 @@ class AuthService {
       token,
       user: {
         id: user._id.toString(),
-        email: user.email
-      }
+        email: user.email,
+      },
     };
   }
 
@@ -61,13 +67,22 @@ class AuthService {
     // Find user
     const user = await this.userRepository.findByEmail(data.email);
     if (!user) {
-      throw new UnauthorizedError('Invalid email or password', ERROR_CODES.INVALID_CREDENTIALS);
+      throw new UnauthorizedError(
+        "Invalid email or password",
+        ERROR_CODES.INVALID_CREDENTIALS
+      );
     }
 
     // Check password
-    const isPasswordValid = await authHelper.comparePassword(data.password, user.password);
+    const isPasswordValid = await authHelper.comparePassword(
+      data.password,
+      user.password
+    );
     if (!isPasswordValid) {
-      throw new UnauthorizedError('Invalid email or password', ERROR_CODES.INVALID_CREDENTIALS);
+      throw new UnauthorizedError(
+        "Invalid email or password",
+        ERROR_CODES.INVALID_CREDENTIALS
+      );
     }
 
     // Generate token
@@ -77,11 +92,10 @@ class AuthService {
       token,
       user: {
         id: user._id.toString(),
-        email: user.email
-      }
+        email: user.email,
+      },
     };
   }
 }
 
 export default AuthService;
-

@@ -1,4 +1,4 @@
-import dotenv from 'dotenv';
+import dotenv from "dotenv";
 
 // Load environment variables
 dotenv.config();
@@ -24,21 +24,28 @@ class Config {
 
   private constructor() {
     // Server
-    this.PORT = parseInt(process.env.PORT || '3000', 10);
-    this.NODE_ENV = process.env.NODE_ENV || 'development';
+    this.PORT = parseInt(process.env.PORT || "3000", 10);
+    this.NODE_ENV = process.env.NODE_ENV || "development";
 
     // Database
-    this.MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/auth-db';
+    this.MONGODB_URI =
+      process.env.MONGODB_URI || "mongodb://localhost:27017/auth-db";
 
     // JWT
-    this.JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-production';
+    this.JWT_SECRET =
+      process.env.JWT_SECRET || "your-secret-key-change-in-production";
 
     // Logger
-    this.LOG_LEVEL = process.env.LOG_LEVEL || (this.NODE_ENV === 'development' ? 'debug' : 'info');
+    this.LOG_LEVEL =
+      process.env.LOG_LEVEL ||
+      (this.NODE_ENV === "development" ? "debug" : "info");
 
     // CORS - Parse comma-separated origins or use default
-    const frontendOriginsEnv = process.env.FRONTEND_ORIGIN || 'http://localhost:3001';
-    this.FRONTEND_ORIGINS = frontendOriginsEnv.split(',').map(origin => origin.trim());
+    const frontendOriginsEnv =
+      process.env.FRONTEND_ORIGIN || "http://localhost:3001";
+    this.FRONTEND_ORIGINS = frontendOriginsEnv
+      .split(",")
+      .map((origin) => origin.trim());
 
     // Validate required environment variables
     this.validate();
@@ -67,7 +74,9 @@ class Config {
     // }
 
     if (required.length > 0) {
-      throw new Error(`Missing required environment variables: ${required.join(', ')}`);
+      throw new Error(
+        `Missing required environment variables: ${required.join(", ")}`
+      );
     }
   }
 
@@ -75,17 +84,16 @@ class Config {
    * Check if running in development mode
    */
   public isDevelopment(): boolean {
-    return this.NODE_ENV === 'development';
+    return this.NODE_ENV === "development";
   }
 
   /**
    * Check if running in production mode
    */
   public isProduction(): boolean {
-    return this.NODE_ENV === 'production';
+    return this.NODE_ENV === "production";
   }
 }
 
 // Export singleton instance
 export default Config.getInstance();
-

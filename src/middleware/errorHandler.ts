@@ -1,8 +1,8 @@
-import { Request, Response, NextFunction } from 'express';
-import { AppError } from '@errors/AppError';
-import config from '@config/config';
-import logger from '@config/logger';
-import { ERROR_CODES } from '@constants/errorCodes';
+import { Request, Response, NextFunction } from "express";
+import { AppError } from "@errors/AppError";
+import config from "@config/config";
+import logger from "@config/logger";
+import { ERROR_CODES } from "@constants/errorCodes";
 
 export function errorHandler(
   err: Error,
@@ -10,6 +10,11 @@ export function errorHandler(
   res: Response,
   next: NextFunction
 ): void {
+  // If response has already been sent, delegate to default Express error handler
+  if (res.headersSent) {
+    return next(err);
+  }
+
   // Prepare error context for logging
   const errorContext = {
     error: {
@@ -17,14 +22,14 @@ export function errorHandler(
       message: err.message,
       code: err instanceof AppError ? err.code : undefined,
       statusCode: err instanceof AppError ? err.statusCode : 500,
-      stack: config.isDevelopment() ? err.stack : undefined
+      stack: config.isDevelopment() ? err.stack : undefined,
     },
     request: {
       url: req.url,
       method: req.method,
       ip: req.ip,
-      userAgent: req.get('user-agent')
-    }
+      userAgent: req.get("user-agent"),
+    },
   };
 
   // Log error based on type and severity
@@ -37,7 +42,7 @@ export function errorHandler(
       logger.info(errorContext, `AppError [${err.code}]: ${err.message}`);
     }
   } else {
-    logger.error(errorContext, 'Unexpected error occurred');
+    logger.error(errorContext, "Unexpected error occurred");
   }
 
   // Handle AppError instances
@@ -47,15 +52,15 @@ export function errorHandler(
       error: {
         code: err.code,
         message: err.message,
-        ...(err.details && { details: err.details })
+        ...(err.details && { details: err.details }),
       },
       ...(config.isDevelopment() && {
         meta: {
           timestamp: err.timestamp.toISOString(),
           path: req.url,
-          method: req.method
-        }
-      })
+          method: req.method,
+        },
+      }),
     };
 
     res.status(err.statusCode).json(errorResponse);
@@ -67,7 +72,7 @@ export function errorHandler(
     success: false,
     error: {
       code: ERROR_CODES.INTERNAL_SERVER_ERROR,
-      message: 'An unexpected error occurred'
+      message: "An unexpected error occurred",
     },
     ...(config.isDevelopment() && {
       meta: {
@@ -75,11 +80,10 @@ export function errorHandler(
         stack: err.stack,
         timestamp: new Date().toISOString(),
         path: req.url,
-        method: req.method
-      }
-    })
+        method: req.method,
+      },
+    }),
   };
 
   res.status(500).json(errorResponse);
 }
-

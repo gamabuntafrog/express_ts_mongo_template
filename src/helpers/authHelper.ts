@@ -1,6 +1,6 @@
-import jwt from 'jsonwebtoken';
-import bcrypt from 'bcryptjs';
-import config from '@config/config';
+import jwt from "jsonwebtoken";
+import bcrypt from "bcryptjs";
+import config from "@config/config";
 
 class AuthHelper {
   private readonly JWT_SECRET: string;
@@ -15,7 +15,7 @@ class AuthHelper {
    */
   public generateToken(userId: string): string {
     return jwt.sign({ userId }, this.JWT_SECRET, {
-      expiresIn: '7d'
+      expiresIn: "7d",
     });
   }
 
@@ -30,11 +30,13 @@ class AuthHelper {
   /**
    * Compare plain password with hashed password
    */
-  public async comparePassword(plainPassword: string, hashedPassword: string): Promise<boolean> {
+  public async comparePassword(
+    plainPassword: string,
+    hashedPassword: string
+  ): Promise<boolean> {
     return bcrypt.compare(plainPassword, hashedPassword);
   }
 }
 
 // Export singleton instance
 export default new AuthHelper();
-
