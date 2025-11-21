@@ -11,12 +11,14 @@ import createAuthRoutes from '@routes/authRoutes';
 import createUserRoutes from '@routes/userRoutes';
 import { errorHandler } from '@middleware/errorHandler';
 import { corsMiddleware } from '@middleware/corsMiddleware';
+import { requestLogger } from '@middleware/requestLogger';
 import { ERROR_CODES } from '@constants/errorCodes';
 
 const app: Application = express();
 
 // Middleware
 app.use(corsMiddleware);
+app.use(requestLogger);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
