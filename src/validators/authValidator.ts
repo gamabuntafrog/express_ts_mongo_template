@@ -1,40 +1,33 @@
-import Joi from 'joi';
+import { z } from "zod";
 
 // Schema for user registration
-export const registerSchema = Joi.object({
-  email: Joi.string()
-    .email({ tlds: { allow: false } })
-    .required()
-    .messages({
-      'string.email': 'Please provide a valid email address',
-      'string.empty': 'Email is required',
-      'any.required': 'Email is required'
-    }),
-  password: Joi.string()
-    .min(6)
-    .required()
-    .messages({
-      'string.min': 'Password must be at least 6 characters long',
-      'string.empty': 'Password is required',
-      'any.required': 'Password is required'
+export const registerSchema = z.object({
+  email: z
+    .string({
+      required_error: "Email is required",
+      invalid_type_error: "Email must be a string",
     })
+    .email("Please provide a valid email address"),
+  password: z
+    .string({
+      required_error: "Password is required",
+      invalid_type_error: "Password must be a string",
+    })
+    .min(6, "Password must be at least 6 characters long"),
 });
 
 // Schema for user login
-export const loginSchema = Joi.object({
-  email: Joi.string()
-    .email({ tlds: { allow: false } })
-    .required()
-    .messages({
-      'string.email': 'Please provide a valid email address',
-      'string.empty': 'Email is required',
-      'any.required': 'Email is required'
-    }),
-  password: Joi.string()
-    .required()
-    .messages({
-      'string.empty': 'Password is required',
-      'any.required': 'Password is required'
+export const loginSchema = z.object({
+  email: z
+    .string({
+      required_error: "Email is required",
+      invalid_type_error: "Email must be a string",
     })
+    .email("Please provide a valid email address"),
+  password: z
+    .string({
+      required_error: "Password is required",
+      invalid_type_error: "Password must be a string",
+    })
+    .min(6, "Password must be at least 6 characters long"),
 });
-
