@@ -1,6 +1,47 @@
-# Backend Server
+# Backend Template
 
-Express.js server with TypeScript and MongoDB (native driver) for authentication.
+> 🚀 A production-ready Express.js backend template with TypeScript, MongoDB, authentication, and best practices.
+
+This is a GitHub template repository. Click "Use this template" to create a new repository from this template.
+
+## 📋 What's Included
+
+- ✅ Express.js with TypeScript
+- ✅ MongoDB native driver integration
+- ✅ JWT-based authentication (access + refresh tokens)
+- ✅ Password hashing with bcryptjs
+- ✅ Request validation with Zod
+- ✅ Structured logging with Pino
+- ✅ CORS configuration
+- ✅ Error handling middleware
+- ✅ Request logging middleware
+- ✅ Conventional commits with commitlint
+- ✅ Git hooks with Husky
+- ✅ ESLint + Prettier for code quality
+
+## 🚀 Quick Start
+
+1. **Create a new repository** from this template by clicking "Use this template" on GitHub
+2. **Clone your new repository**:
+   ```bash
+   git clone <your-repo-url>
+   cd <your-repo-name>
+   ```
+3. **Install dependencies**:
+   ```bash
+   npm install
+   ```
+4. **Set up environment variables**:
+   ```bash
+   cp .env.example .env
+   ```
+   Then edit `.env` with your configuration (MongoDB URI, JWT secrets, etc.)
+5. **Start developing**:
+   ```bash
+   npm run dev
+   ```
+
+For more detailed information, see [TEMPLATE.md](./TEMPLATE.md).
 
 ## Installation
 
@@ -144,14 +185,30 @@ refactor(mapper): replace any types with proper TypeScript types
 
 Commit messages are automatically validated when you commit. If your commit message doesn't follow the conventional commit format, the commit will be rejected with an error message explaining what needs to be fixed.
 
-## Technologies
+## 📚 Technologies
 
-- Express.js
-- TypeScript
-- MongoDB (native driver)
-- Zod for schema validation
-- JWT for authentication
-- bcryptjs for password hashing
-- Commitlint for commit message validation
-- Husky for git hooks
+- **Express.js** - Web framework
+- **TypeScript** - Type-safe JavaScript
+- **MongoDB** - Database (native driver)
+- **Zod** - Schema validation
+- **JWT** - Authentication tokens
+- **bcryptjs** - Password hashing
+- **Pino** - Structured logging
+- **Commitlint** - Commit message validation
+- **Husky** - Git hooks
+
+## 📝 Next Steps After Creating Your Repository
+
+1. Update `package.json` with your project name and description
+2. Configure your environment variables in `.env`
+3. Customize the authentication logic if needed
+4. Add your domain-specific models, services, and routes
+5. Set up your CI/CD pipeline
+6. Configure your production deployment
+
+## 📖 Documentation
+
+- See [TEMPLATE.md](./TEMPLATE.md) for detailed template information
+- See [.github/ISSUE_TEMPLATE](./.github/ISSUE_TEMPLATE/) for issue templates
+- See [.github/PULL_REQUEST_TEMPLATE.md](./.github/PULL_REQUEST_TEMPLATE.md) for PR template
 

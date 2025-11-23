@@ -1,7 +1,7 @@
 {
-  "name": "backend",
+  "name": "backend-template",
   "version": "1.0.0",
-  "description": "Express.js server with TypeScript and MongoDB",
+  "description": "A production-ready Express.js backend template with TypeScript, MongoDB, authentication, and best practices",
   "type": "module",
   "main": "dist/server.js",
   "scripts": {
@@ -14,7 +14,16 @@
     "format": "prettier --write \"src/**/*.ts\"",
     "format:check": "prettier --check \"src/**/*.ts\""
   },
-  "keywords": [],
+  "keywords": [
+    "express",
+    "typescript",
+    "mongodb",
+    "authentication",
+    "jwt",
+    "backend",
+    "template",
+    "boilerplate"
+  ],
   "author": "",
   "license": "ISC",
   "dependencies": {
