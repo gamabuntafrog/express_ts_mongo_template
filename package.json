@@ -62,6 +62,9 @@
     "*.ts": [
       "eslint --fix",
       "prettier --write"
+    ],
+    "*.{yml,yaml}": [
+      "prettier --write"
     ]
   }
 }
