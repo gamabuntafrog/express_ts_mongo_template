@@ -1,7 +1,9 @@
+import jwt from "jsonwebtoken";
 import UserRepository from "@repositories/UserRepository";
 import { ConflictError, UnauthorizedError } from "@errors/AppError";
 import authHelper from "@helpers/authHelper";
 import { ERROR_CODES } from "@constants/errorCodes";
+import { IUserDocument } from "@models/User";
 
 export interface RegisterData {
   email: string;
@@ -14,7 +16,8 @@ export interface LoginData {
 }
 
 export interface AuthResult {
-  token: string;
+  accessToken: string;
+  refreshToken: string;
   user: {
     id: string;
     email: string;
@@ -23,6 +26,28 @@ export interface AuthResult {
 
 class AuthService {
   constructor(private readonly userRepository: UserRepository) {}
+
+  /**
+   * Helper that builds auth payload and persists the refresh token hash
+   */
+  private async buildAuthResult(user: IUserDocument): Promise<AuthResult> {
+    const accessToken = authHelper.generateAccessToken(user._id.toString());
+    const refreshToken = authHelper.generateRefreshToken(user._id.toString());
+    const refreshTokenHash = await authHelper.hashToken(refreshToken);
+
+    await this.userRepository.updateById(user._id.toString(), {
+      refreshTokenHash,
+    });
+
+    return {
+      accessToken,
+      refreshToken,
+      user: {
+        id: user._id.toString(),
+        email: user.email,
+      },
+    };
+  }
 
   /**
    * Register new user
@@ -47,16 +72,7 @@ class AuthService {
       password: hashedPassword,
     });
 
-    // Generate token
-    const token = authHelper.generateToken(user._id.toString());
-
-    return {
-      token,
-      user: {
-        id: user._id.toString(),
-        email: user.email,
-      },
-    };
+    return this.buildAuthResult(user);
   }
 
   /**
@@ -85,16 +101,57 @@ class AuthService {
       );
     }
 
-    // Generate token
-    const token = authHelper.generateToken(user._id.toString());
+    return this.buildAuthResult(user);
+  }
 
-    return {
-      token,
-      user: {
-        id: user._id.toString(),
-        email: user.email,
-      },
-    };
+  /**
+   * Refresh access and refresh tokens
+   */
+  public async refreshTokens(refreshToken: string): Promise<AuthResult> {
+    let decoded: { userId: string };
+
+    try {
+      decoded = authHelper.verifyRefreshToken(refreshToken);
+    } catch (error) {
+      if (error instanceof jwt.TokenExpiredError) {
+        throw new UnauthorizedError(
+          "Refresh token expired",
+          ERROR_CODES.TOKEN_EXPIRED
+        );
+      }
+
+      if (error instanceof jwt.JsonWebTokenError) {
+        throw new UnauthorizedError(
+          "Invalid refresh token",
+          ERROR_CODES.INVALID_TOKEN
+        );
+      }
+
+      throw error;
+    }
+
+    const user = await this.userRepository.findById(decoded.userId);
+
+    if (!user || !user.refreshTokenHash) {
+      throw new UnauthorizedError(
+        "Invalid refresh token",
+        ERROR_CODES.INVALID_TOKEN
+      );
+    }
+
+    const isValidToken = await authHelper.compareToken(
+      refreshToken,
+      user.refreshTokenHash
+    );
+
+    if (!isValidToken) {
+      throw new UnauthorizedError(
+        "Invalid refresh token",
+        ERROR_CODES.INVALID_TOKEN
+      );
+    }
+
+    return this.buildAuthResult(user);
   }
 }
 

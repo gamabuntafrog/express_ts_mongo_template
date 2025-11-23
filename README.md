@@ -15,7 +15,8 @@ npm install
 cp .env.example .env
 ```
 
-2. Update `.env` with your MongoDB connection string and JWT secret.
+2. Update `.env` with your MongoDB connection string and JWT secrets.
+   - You can also configure `ACCESS_TOKEN_EXPIRES_IN`, `REFRESH_TOKEN_EXPIRES_IN`, and `REFRESH_TOKEN_SECRET` for more granular control over token lifetimes.
 
 ## Running the Server
 
@@ -37,12 +38,62 @@ npm start
 #### Register
 - **POST** `/api/auth/register`
 - Body: `{ "email": "user@example.com", "password": "password123" }`
-- Response: `{ "success": true, "token": "...", "user": { "id": "...", "email": "..." } }`
+- Response:
+  ```json
+  {
+    "success": true,
+    "message": "User registered successfully",
+    "data": {
+      "token": "<access-token>",
+      "accessToken": "<access-token>",
+      "refreshToken": "<refresh-token>",
+      "user": {
+        "id": "...",
+        "email": "user@example.com"
+      }
+    }
+  }
+  ```
 
 #### Login
 - **POST** `/api/auth/login`
 - Body: `{ "email": "user@example.com", "password": "password123" }`
-- Response: `{ "success": true, "token": "...", "user": { "id": "...", "email": "..." } }`
+- Response:
+  ```json
+  {
+    "success": true,
+    "message": "Login successful",
+    "data": {
+      "token": "<access-token>",
+      "accessToken": "<access-token>",
+      "refreshToken": "<refresh-token>",
+      "user": {
+        "id": "...",
+        "email": "user@example.com"
+      }
+    }
+  }
+  ```
+
+#### Refresh tokens
+- **POST** `/api/auth/refresh`
+- Body: `{ "refreshToken": "<refresh-token>" }`
+- Response:
+  ```json
+  {
+    "success": true,
+    "message": "Token refreshed successfully",
+    "data": {
+      "token": "<new-access-token>",
+      "accessToken": "<new-access-token>",
+      "refreshToken": "<new-refresh-token>",
+      "user": {
+        "id": "...",
+        "email": "user@example.com"
+      }
+    }
+  }
+  ```
 
 ### Protected Routes
 

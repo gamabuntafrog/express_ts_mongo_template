@@ -5,6 +5,7 @@ import { ObjectId } from "mongodb";
 export const UserSchema = z.object({
   email: z.string().email("Please provide a valid email").toLowerCase().trim(),
   password: z.string().min(6, "Password must be at least 6 characters"),
+  refreshTokenHash: z.string().optional(),
 });
 
 // Zod schema for User document (includes _id and timestamps)

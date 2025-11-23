@@ -13,6 +13,9 @@ class Config {
 
   // JWT configuration
   public readonly JWT_SECRET: string;
+  public readonly ACCESS_TOKEN_EXPIRES_IN: string;
+  public readonly REFRESH_TOKEN_EXPIRES_IN: string;
+  public readonly REFRESH_TOKEN_SECRET: string;
 
   // Logger configuration
   public readonly LOG_LEVEL: string;
@@ -34,6 +37,12 @@ class Config {
     // JWT
     this.JWT_SECRET =
       process.env.JWT_SECRET || "your-secret-key-change-in-production";
+    this.ACCESS_TOKEN_EXPIRES_IN = process.env.ACCESS_TOKEN_EXPIRES_IN || "1h";
+    this.REFRESH_TOKEN_EXPIRES_IN =
+      process.env.REFRESH_TOKEN_EXPIRES_IN || "7d";
+    this.REFRESH_TOKEN_SECRET =
+      process.env.REFRESH_TOKEN_SECRET ||
+      "your-secret-refresh-key-change-in-production";
 
     // Logger
     this.LOG_LEVEL =

@@ -29,3 +29,12 @@ export const loginSchema = z.object({
     invalid_type_error: "Password must be a string",
   }),
 });
+
+export const refreshSchema = z.object({
+  refreshToken: z
+    .string({
+      required_error: "Refresh token is required",
+      invalid_type_error: "Refresh token must be a string",
+    })
+    .min(1, "Refresh token cannot be empty"),
+});

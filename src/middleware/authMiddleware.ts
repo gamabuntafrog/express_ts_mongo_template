@@ -1,8 +1,7 @@
 import { Response, NextFunction } from "express";
-import jwt from "jsonwebtoken";
 import { AuthRequest } from "@typings/express";
 import { UnauthorizedError } from "@errors/AppError";
-import config from "@config/config";
+import authHelper from "@helpers/authHelper";
 import { ERROR_CODES } from "@constants/errorCodes";
 
 export function authenticate(
@@ -25,9 +24,7 @@ export function authenticate(
 
     // Verify token
     try {
-      const decoded = jwt.verify(token, config.JWT_SECRET) as {
-        userId: string;
-      };
+      const decoded = authHelper.verifyAccessToken(token);
 
       // Attach user info to request
       req.user = {
