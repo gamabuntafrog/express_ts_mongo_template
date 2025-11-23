@@ -4,6 +4,24 @@ This is a GitHub template repository for creating production-ready Express.js ba
 
 ## 🚀 Quick Start
 
+### Prerequisites
+
+- **Node.js 22.x** or higher
+- **npm 10.x** or higher
+
+You can use [nvm](https://github.com/nvm-sh/nvm) to manage Node.js versions:
+```bash
+nvm install 22
+nvm use 22
+```
+
+Or if you have `.nvmrc` file, simply run:
+```bash
+nvm use
+```
+
+### Installation Steps
+
 1. Click "Use this template" on GitHub to create a new repository
 2. Clone your new repository
 3. Install dependencies: `npm install`
@@ -43,6 +61,7 @@ src/
 ```
 
 ### Development Tools
+- Node.js 22.x (required)
 - TypeScript for type safety
 - ESLint + Prettier for code quality
 - Husky for git hooks

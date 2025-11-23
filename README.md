@@ -21,6 +21,24 @@ This is a GitHub template repository. Click "Use this template" to create a new 
 
 ## 🚀 Quick Start
 
+### Prerequisites
+
+- **Node.js 22.x** or higher
+- **npm 10.x** or higher
+
+You can use [nvm](https://github.com/nvm-sh/nvm) to manage Node.js versions:
+```bash
+nvm install 22
+nvm use 22
+```
+
+Or if you have `.nvmrc` file, simply run:
+```bash
+nvm use
+```
+
+### Installation Steps
+
 1. **Create a new repository** from this template by clicking "Use this template" on GitHub
 2. **Clone your new repository**:
    ```bash
@@ -45,9 +63,18 @@ For more detailed information, see [TEMPLATE.md](./TEMPLATE.md).
 
 ## Installation
 
+### Requirements
+
+- **Node.js 22.x** or higher
+- **npm 10.x** or higher
+
+### Install Dependencies
+
 ```bash
 npm install
 ```
+
+> **Note:** If you're using [nvm](https://github.com/nvm-sh/nvm), you can run `nvm use` to automatically switch to the correct Node.js version (specified in `.nvmrc`).
 
 ## Configuration
 

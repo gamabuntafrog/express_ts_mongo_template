@@ -4,6 +4,24 @@ Thank you for your interest in contributing to this backend template!
 
 ## Getting Started
 
+### Prerequisites
+
+- **Node.js 22.x** or higher
+- **npm 10.x** or higher
+
+You can use [nvm](https://github.com/nvm-sh/nvm) to manage Node.js versions:
+```bash
+nvm install 22
+nvm use 22
+```
+
+Or if you have `.nvmrc` file, simply run:
+```bash
+nvm use
+```
+
+### Setup Steps
+
 1. Fork the repository
 2. Clone your fork: `git clone <your-fork-url>`
 3. Install dependencies: `npm install`
