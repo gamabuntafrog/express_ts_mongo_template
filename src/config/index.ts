@@ -106,3 +106,4 @@ class Config {
 
 // Export singleton instance
 export default Config.getInstance();
+

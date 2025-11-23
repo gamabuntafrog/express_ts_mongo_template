@@ -16,6 +16,7 @@
     "sourceMap": true,
     "baseUrl": "./src",
     "paths": {
+      "@config": ["config/index"],
       "@config/*": ["config/*"],
       "@controllers/*": ["controllers/*"],
       "@services/*": ["services/*"],
@@ -29,7 +30,8 @@
       "@helpers/*": ["helpers/*"],
       "@validators/*": ["validators/*"],
       "@mappers/*": ["mappers/*"],
-      "@db/*": ["db/*"]
+      "@db/*": ["db/*"],
+      "@utilities/*": ["utilities/*"]
     }
   },
   "include": ["src/**/*"],

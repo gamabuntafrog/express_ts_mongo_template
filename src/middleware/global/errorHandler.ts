@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { AppError } from "@errors/AppError";
-import config from "@config/config";
-import logger from "@config/logger";
+import config from "@config";
+import logger from "@utilities/logger";
 import { ERROR_CODES } from "@constants/errorCodes";
 
 export function errorHandler(

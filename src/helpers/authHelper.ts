@@ -1,6 +1,6 @@
 import jwt, { SignOptions } from "jsonwebtoken";
 import bcrypt from "bcryptjs";
-import config from "@config/config";
+import config from "@config";
 
 class AuthHelper {
   private readonly accessTokenSecret: string;

@@ -1,5 +1,5 @@
 import pino from "pino";
-import config from "@config/config";
+import config from "@config";
 
 const loggerOptions: pino.LoggerOptions = {
   level: config.LOG_LEVEL || (config.isDevelopment() ? "debug" : "info"),

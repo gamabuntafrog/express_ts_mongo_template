@@ -1,6 +1,6 @@
 import express, { Application, Request, Response } from "express";
-import config from "@config/config";
-import logger from "@config/logger";
+import config from "@config";
+import logger from "@utilities/logger";
 import connectDB from "@db/database";
 import UserRepository from "@repositories/UserRepository";
 import { indexManager } from "@db/indexes/IndexManager";

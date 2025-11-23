@@ -1,6 +1,6 @@
 import { Db, Collection } from "mongodb";
 import { indexRegistry, IndexRegistryEntry } from "./IndexRegistry";
-import logger from "@config/logger";
+import logger from "@utilities/logger";
 
 /**
  * Index Manager
