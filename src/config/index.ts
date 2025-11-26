@@ -32,7 +32,7 @@ class Config {
 
     // Database
     this.MONGODB_URI =
-      process.env.MONGODB_URI || "mongodb://localhost:27017/auth-db";
+      process.env.MONGODB_URI || "mongodb://localhost:27017/your-db-name";
 
     // JWT
     this.JWT_SECRET =
