@@ -1,38 +1,26 @@
-import { Request, Response, NextFunction } from "express";
+import cors, { CorsOptions } from "cors";
 import config from "@config";
 
-/**
- * CORS middleware that validates origins against a whitelist
- * and handles preflight requests
- */
-export function corsMiddleware(
-  req: Request,
-  res: Response,
-  next: NextFunction
-): void {
-  const origin = req.headers.origin;
-  const allowedOrigins = config.FRONTEND_ORIGINS;
+const allowedOrigins = new Set(config.FRONTEND_ORIGINS);
 
-  // Check if origin is in whitelist
-  if (origin && allowedOrigins.includes(origin)) {
-    res.setHeader("Access-Control-Allow-Origin", origin);
-    res.setHeader("Access-Control-Allow-Credentials", "true");
-  }
+const corsOptions: CorsOptions = {
+  origin(origin, callback) {
+    if (!origin) {
+      return callback(null, true);
+    }
 
-  // Handle preflight requests
-  if (req.method === "OPTIONS") {
-    res.setHeader(
-      "Access-Control-Allow-Methods",
-      "GET, POST, PUT, DELETE, PATCH, OPTIONS"
-    );
-    res.setHeader(
-      "Access-Control-Allow-Headers",
-      "Content-Type, Authorization, X-Requested-With"
-    );
-    res.setHeader("Access-Control-Max-Age", "86400"); // 24 hours
-    res.status(204).end();
-    return;
-  }
+    if (allowedOrigins.has(origin)) {
+      return callback(null, true);
+    }
 
-  next();
-}
+    // Disable CORS headers for disallowed origins
+    return callback(null, false);
+  },
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
+  maxAge: 86400,
+  optionsSuccessStatus: 204,
+};
+
+export const corsMiddleware = cors(corsOptions);
