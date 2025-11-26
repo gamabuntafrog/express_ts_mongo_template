@@ -6,7 +6,7 @@
   "main": "dist/server.js",
   "scripts": {
     "dev": "tsx watch src/server.ts",
-    "build": "tsc && tsc-alias",
+    "build": "tsc && tsc-alias -p tsconfig.json -f",
     "start": "node dist/server.js",
     "docker:infra:up": "docker compose -f docker-compose.dev.yml up -d",
     "docker:infra:down": "docker compose -f docker-compose.dev.yml down",
@@ -70,6 +70,9 @@
       "prettier --write"
     ],
     "*.{yml,yaml}": [
+      "prettier --write"
+    ],
+    "*.json": [
       "prettier --write"
     ]
   }
