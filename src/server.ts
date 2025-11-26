@@ -14,6 +14,7 @@ import { errorHandler } from "@middleware/global/errorHandler";
 import { corsMiddleware } from "@middleware/global/corsMiddleware";
 import { requestLogger } from "@middleware/global/requestLogger";
 import { ERROR_CODES } from "@constants/errorCodes";
+import { DATABASE_COLLECTIONS } from "@constants/database";
 
 const app: Application = express();
 
@@ -28,7 +29,9 @@ const db = await connectDB();
 
 // Initialize repositories with database collections
 // Repositories will register their indexes during construction
-const userRepository = new UserRepository(db.collection("users"));
+const userRepository = new UserRepository(
+  db.collection(DATABASE_COLLECTIONS.USERS)
+);
 
 // Create all registered indexes centrally
 await indexManager.createAllIndexes(db);

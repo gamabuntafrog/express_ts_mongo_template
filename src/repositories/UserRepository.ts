@@ -2,6 +2,10 @@ import { Collection, IndexDescription } from "mongodb";
 import { BaseRepository } from "@repositories/BaseRepository";
 import { indexRegistry } from "@db/indexes/IndexRegistry";
 import {
+  DATABASE_COLLECTIONS,
+  DatabaseCollectionName,
+} from "@constants/database";
+import {
   IUserDocument,
   CreateUserInput,
   UpdateUserInput,
@@ -14,7 +18,8 @@ class UserRepository extends BaseRepository<
   CreateUserInput,
   UpdateUserInput
 > {
-  static readonly collectionName = "users";
+  static readonly collectionName: DatabaseCollectionName =
+    DATABASE_COLLECTIONS.USERS;
   static readonly indexes: IndexDescription[] = [
     {
       key: { email: 1 },
